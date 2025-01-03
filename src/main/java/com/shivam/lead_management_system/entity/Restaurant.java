@@ -3,19 +3,13 @@ package com.shivam.lead_management_system.entity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
@@ -30,30 +24,23 @@ public class Restaurant {
 
     private String address;
 
+    private String businessType;  // New: Store type of restaurant business
+
+    private String status;  // New: Store status like 'Active', 'Inactive', etc.
+
+    private String callFrequency;  // New: Frequency of contact calls
+
     @JsonManagedReference
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Contact> contacts = new ArrayList<>();
 
-    @OneToOne(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Lead lead;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Interaction> interactions = new ArrayList<>();
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
     private LocalDateTime updatedAt;
-
-    public void addContact(Contact contact) {
-        if (contacts == null) {
-            contacts = new ArrayList<>();
-        }
-        contacts.add(contact);
-        contact.setRestaurant(this);
-    }
-
-
-    public void removeContact(Contact contact) {
-        contacts.remove(contact);
-        contact.setRestaurant(null);
-    }
 
     @PrePersist
     protected void onCreate() {
@@ -64,6 +51,26 @@ public class Restaurant {
     @PreUpdate
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
+    }
+
+    public void addContact(Contact contact) {
+        this.contacts.add(contact);
+        contact.setRestaurant(this);
+    }
+
+    public void removeContact(Contact contact) {
+        this.contacts.remove(contact);
+        contact.setRestaurant(null);
+    }
+
+    public void addInteraction(Interaction interaction) {
+        this.interactions.add(interaction);
+        interaction.setRestaurant(this);
+    }
+
+    public void removeInteraction(Interaction interaction) {
+        this.interactions.remove(interaction);
+        interaction.setRestaurant(null);
     }
 
     public Long getId() {
@@ -90,6 +97,30 @@ public class Restaurant {
         this.address = address;
     }
 
+    public String getBusinessType() {
+        return businessType;
+    }
+
+    public void setBusinessType(String businessType) {
+        this.businessType = businessType;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getCallFrequency() {
+        return callFrequency;
+    }
+
+    public void setCallFrequency(String callFrequency) {
+        this.callFrequency = callFrequency;
+    }
+
     public List<Contact> getContacts() {
         return contacts;
     }
@@ -98,12 +129,12 @@ public class Restaurant {
         this.contacts = contacts;
     }
 
-    public Lead getLead() {
-        return lead;
+    public List<Interaction> getInteractions() {
+        return interactions;
     }
 
-    public void setLead(Lead lead) {
-        this.lead = lead;
+    public void setInteractions(List<Interaction> interactions) {
+        this.interactions = interactions;
     }
 
     public LocalDateTime getCreatedAt() {
