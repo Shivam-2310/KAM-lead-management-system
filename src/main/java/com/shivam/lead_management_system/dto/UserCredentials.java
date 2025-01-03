@@ -1,7 +1,12 @@
 package com.shivam.lead_management_system.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class UserCredentials {
+    @NotBlank
     private String username;
+
+    @NotBlank
     private String password;
 
     public String getUsername() {
