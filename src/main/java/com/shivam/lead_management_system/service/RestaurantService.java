@@ -35,4 +35,13 @@ public class RestaurantService {
         return contactRepository.saveAll(contacts);
     }
 
+    public Restaurant updateRestaurantStatus(Long id, String status) {
+        Restaurant restaurant = restaurantRepository.findById(id).orElse(null);
+        if (restaurant != null) {
+            restaurant.setStatus(status);
+            return restaurantRepository.save(restaurant);
+        }
+        return null;
+    }
+
 }

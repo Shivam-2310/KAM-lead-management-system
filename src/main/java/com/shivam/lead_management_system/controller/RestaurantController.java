@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/restaurants")
+@RequestMapping("/restaurants")
 public class RestaurantController {
 
     @Autowired
@@ -63,6 +63,8 @@ public class RestaurantController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
+
     @GetMapping("/{id}/contacts")
     public ResponseEntity<List<Contact>> getContactsByRestaurantId(@PathVariable Long id) {
         Restaurant restaurant = restaurantService.getRestaurantById(id);
@@ -74,6 +76,30 @@ public class RestaurantController {
 
         return ResponseEntity.ok(contacts);
     }
+
+    @PutMapping("/{id}/status")
+    public ResponseEntity<Map<String, Object>> updateRestaurantStatus(
+            @PathVariable Long id,
+            @RequestParam("status") String status) {
+
+        if (!List.of("NEW", "IN_PROGRESS", "CLOSED").contains(status.toUpperCase())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Collections.singletonMap("message", "Invalid status. Allowed values: NEW, IN_PROGRESS, CLOSED."));
+        }
+
+        Restaurant updatedRestaurant = restaurantService.updateRestaurantStatus(id, status.toUpperCase());
+        if (updatedRestaurant == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Collections.singletonMap("message", "Restaurant not found."));
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Restaurant status updated successfully.");
+        response.put("updatedRestaurant", updatedRestaurant);
+
+        return ResponseEntity.ok(response);
+    }
+
 
 
 }

@@ -29,21 +29,20 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .requestMatchers("/auth/**").permitAll() // Allow login and other auth-related endpoints
-                .anyRequest().authenticated() // Require authentication for all other requests
+                .requestMatchers("/auth/**").permitAll()
+                .anyRequest().authenticated()
                 .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Stateless session for JWT
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Add JWT filter before UsernamePasswordAuthenticationFilter
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
-    // Authentication provider to authenticate user using KamDetailsService
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(kamDetailsService);  // Use KAMDetailsService for user lookup
-        provider.setPasswordEncoder(passwordEncoder());  // Set password encoder (BCrypt)
+        provider.setUserDetailsService(kamDetailsService);
+        provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
 

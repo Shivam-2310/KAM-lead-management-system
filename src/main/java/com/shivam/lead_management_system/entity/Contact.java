@@ -19,7 +19,7 @@ public class Contact {
 
     private String name;
 
-    private String role;  // Role of the contact (e.g., Owner, Manager)
+    private String role;
 
     @Column(name = "phone_number", nullable = false)
     private String phone;

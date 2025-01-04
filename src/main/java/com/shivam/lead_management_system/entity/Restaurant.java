@@ -23,12 +23,9 @@ public class Restaurant {
     private String name;
 
     private String address;
-
-    private String businessType;  // New: Store type of restaurant business
-
-    private String status;  // New: Store status like 'Active', 'Inactive', etc.
-
-    private String callFrequency;  // New: Frequency of contact calls
+    private String businessType;
+    private String status = "NEW";  // Default status
+    private String callFrequency;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -39,7 +36,6 @@ public class Restaurant {
     private List<Interaction> interactions = new ArrayList<>();
 
     private LocalDateTime createdAt = LocalDateTime.now();
-
     private LocalDateTime updatedAt;
 
     @PrePersist

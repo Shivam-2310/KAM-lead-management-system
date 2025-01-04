@@ -16,7 +16,7 @@ public class AuthenticationController {
     private JwtTokenProvider jwtTokenProvider;
 
     @Autowired
-    private KAMDetailsService kamDetailsService;  // Assuming you have a service to load KAM details
+    private KAMDetailsService kamDetailsService;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserCredentials userCredentials) {
