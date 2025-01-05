@@ -1,10 +1,13 @@
 package com.shivam.lead_management_system.controller;
 
+import com.shivam.lead_management_system.dto.CallPlanningResponseDTO;
 import com.shivam.lead_management_system.entity.CallPlanning;
 import com.shivam.lead_management_system.service.CallPlanningService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/call-planning")
@@ -19,6 +22,12 @@ public class CallPlanningController {
             @RequestBody CallPlanning callPlanning) {
         CallPlanning savedCallPlanning = callPlanningService.createOrUpdateCallPlanning(callPlanning, restaurantId);
         return ResponseEntity.ok(savedCallPlanning);
+    }
+
+    @GetMapping("/today-calls")
+    public ResponseEntity<List<CallPlanningResponseDTO>> getTodaysCalls() {
+        List<CallPlanningResponseDTO> todaysCalls = callPlanningService.getTodaysCalls();
+        return ResponseEntity.ok(todaysCalls);
     }
 
     @GetMapping("/{restaurantId}")
