@@ -9,7 +9,6 @@ public class CallPlanningResponseDTO {
     private String callFrequency;
     private List<Interaction> previousInteractions;
 
-    // Getters and setters
     public Long getRestaurantId() {
         return restaurantId;
     }
