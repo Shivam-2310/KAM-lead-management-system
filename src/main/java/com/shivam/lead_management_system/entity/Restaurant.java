@@ -1,5 +1,6 @@
 package com.shivam.lead_management_system.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -37,6 +38,16 @@ public class Restaurant {
 
     private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime updatedAt;
+
+    @OneToOne(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private CallPlanning callPlanning;
+
+    // Method to set the CallPlanning while maintaining bidirectional relationship
+    public void setCallPlanning(CallPlanning callPlanning) {
+        this.callPlanning = callPlanning;
+        callPlanning.setRestaurant(this);
+    }
 
     @PrePersist
     protected void onCreate() {
@@ -147,5 +158,9 @@ public class Restaurant {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public CallPlanning getCallPlanning() {
+        return callPlanning;
     }
 }
